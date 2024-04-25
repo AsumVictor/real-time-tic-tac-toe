@@ -5,7 +5,8 @@ function useTicTacToe() {
   const [isXNext, setIsXNext] = useState(true);
   const [winnerTile, setWinnerTile] = useState(null);
   
-  const handleClick = (index) => {
+  const handleClick = (index, isTurn) => {
+    if (!isTurn) return 
     if (squares[index] || calculateWinner(squares)) {
       return;
     }

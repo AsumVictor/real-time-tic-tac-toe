@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import IconX, { IconXOutline } from "../utils/IconX";
 import IconO, { IconOOutline } from "../utils/IconO";
 
-const BoardTile = ({ value, onTileClick, isXNext }) => {
+const BoardTile = ({ value, onTileClick, isXNext, isTurn }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
+    if (!isTurn) return;
     setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
+    if (!isTurn) return;
     setIsHovered(false);
   };
 
@@ -27,17 +29,21 @@ const BoardTile = ({ value, onTileClick, isXNext }) => {
     );
 
   return (
-    <div className="relative flex justify-center">
+    <div className={`relative flex justify-center `}>
       <button
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={onTileClick}
-        className={` bg-[var(--menu-background-color)] w-24 h-24 rounded-lg flex justify-center items-center`}>
+        className={` bg-[var(--menu-background-color)] w-24 h-24 rounded-lg flex justify-center items-center ${
+          isTurn ? null : " cursor-not-allowed"
+        }`}
+      >
         {value === null && isHovered && hoverOutline}
         {value !== null && valueIcone}
       </button>
       <div
-        className={` bg-[var(--menu-background-shadow-color)] absolute h-24 w-24 top-2 -z-10 rounded-lg`}></div>
+        className={` bg-[var(--menu-background-shadow-color)] absolute h-24 w-24 top-2 -z-10 rounded-lg`}
+      ></div>
     </div>
   );
 };
