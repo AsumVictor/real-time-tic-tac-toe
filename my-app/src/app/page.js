@@ -1,9 +1,10 @@
 "use client";
+import SelectPlayer from "@/components/SelectPlayer";
+import { PrimaryButton } from "@/utils/Buttons";
+import IconO from "@/utils/IconO";
+import IconX from "@/utils/IconX";
 import React, { useState } from "react";
-import { PrimaryButton } from "./utils/Buttons";
-import IconX from "./utils/IconX";
-import IconO from "./utils/IconO";
-import SelectPlayer from "./components/SelectPlayer";
+
 
 export default function Home() {
   const [player, setPlayer] = useState("X");

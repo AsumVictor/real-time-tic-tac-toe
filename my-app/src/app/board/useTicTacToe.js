@@ -4,6 +4,7 @@ function useTicTacToe() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [winnerTile, setWinnerTile] = useState(null);
+  
   const handleClick = (index) => {
     if (squares[index] || calculateWinner(squares)) {
       return;

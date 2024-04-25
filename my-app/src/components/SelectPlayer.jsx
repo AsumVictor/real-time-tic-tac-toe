@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import IconX from "../utils/IconX";
 import IconO from "../utils/IconO";
+import IconX from "../utils/IconX";
 
 const SelectPlayer = ({ handlerPlayerSelect, player }) => {
   const hoverColorClasses = {

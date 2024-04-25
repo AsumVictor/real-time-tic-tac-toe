@@ -1,12 +1,13 @@
 "use client";
 import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import BoardHeader from "../components/BoardHeader";
-import BoardTile from "../components/BoardTile";
 import useTicTacToe from "./useTicTacToe";
-import IconO from "../utils/IconO";
-import IconX from "../utils/IconX";
-import { QuitButton } from "../utils/Buttons";
+import BoardHeader from "@/components/BoardHeader";
+import BoardTile from "@/components/BoardTile";
+import IconX from "@/utils/IconX";
+import IconO from "@/utils/IconO";
+import { QuitButton } from "@/utils/Buttons";
+
 
 const Board = () => {
   const { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile } =
