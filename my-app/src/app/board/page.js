@@ -8,7 +8,6 @@ import IconX from "@/utils/IconX";
 import IconO from "@/utils/IconO";
 import { QuitButton } from "@/utils/Buttons";
 
-
 const Board = () => {
   const { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile } =
     useTicTacToe();
@@ -37,8 +36,8 @@ const Board = () => {
   };
 
   return (
-    <>
-      <div className="px-2 sm:px-0 space-y-10">
+    <div className="w-full  h-full flex justify-center items-center py-20">
+      <div className="px-2 sm:px-0 space-y-10 w-full 450px:w-[10cm]">
         <BoardHeader reset={reset} isXNext={isXNext} />
         <div className="grid grid-cols-3 gap-x-2 gap-y-4 content-around">
           <BoardTile
@@ -111,7 +110,8 @@ const Board = () => {
             enterTo="opacity-100"
             leave="ease-in duration-200"
             leaveFrom="opacity-100"
-            leaveTo="opacity-0">
+            leaveTo="opacity-0"
+          >
             <div className="fixed inset-0 bg-black/25" />
           </Transition.Child>
 
@@ -124,11 +124,13 @@ const Board = () => {
                 enterTo="opacity-100 scale-100"
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95">
+                leaveTo="opacity-0 scale-95"
+              >
                 <Dialog.Panel className="w-full transform overflow-hidden bg-[var(--menu-background-color)] p-6 text-left align-middle shadow-xl transition-all space-y-3">
                   <Dialog.Title
                     as="h3"
-                    className=" text-center text-sm font-bold leading-6 text-[var(--text-grey)]">
+                    className=" text-center text-sm font-bold leading-6 text-[var(--text-grey)]"
+                  >
                     PLAYER 1 WINS!
                   </Dialog.Title>
                   <div className="space-x-2 flex justify-center items-center">
@@ -139,7 +141,8 @@ const Board = () => {
                     )}
 
                     <p
-                      className={` text-2xl font-bold ${winnerClass[winnerTile]}`}>
+                      className={` text-2xl font-bold ${winnerClass[winnerTile]}`}
+                    >
                       TAKES THE ROUND
                     </p>
                   </div>
@@ -158,7 +161,7 @@ const Board = () => {
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 };
 
