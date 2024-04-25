@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-color: #1a2a33;
+
+  --menu-background-color: rgba(31, 54, 65, 1);
+  --menu-background-shadow-color: rgba(16, 33, 42, 1);
+  --menu-hover-color: rgba(168, 191, 201, 0.05);
+  --menu-restart-color: rgba(168, 191, 201, 1);
+  --menu-restart-bg-shadow-color: rgba(107, 137, 151, 1);
+
+  --primary-green: rgba(49, 195, 189, 1);
+  --hover-green: rgba(101, 233, 228, 1);
+  --background-green: rgba(49, 195, 189, 0.5);
+  --primary-yellow: rgba(242, 177, 55, 1);
+  --hover-yellow: rgba(255, 200, 96, 1);
+  --background-yellow: rgba(242, 177, 55, 0.5);
+  --button-text-color: #333333;
+  --icon-grey: #979797;
+
+  /* typography */
+  --text-grey: #a8bfc9;
+
+  /* width */
+  --desktop-width: 460px;
+  --mobile-width: 95vw;
+
+  /* General button */
+  --pb-radius: 15px;
+  /* Desktop button */
+  --desktop-pb-height: 60px;
+  /* Tablet button */
+  --tablet-pb-height: 60px;
+  /* mobile button */
+  --mobile-pb-height: 50px;
+}
+
+body {
+  background-color: var(--background-color);
+}
