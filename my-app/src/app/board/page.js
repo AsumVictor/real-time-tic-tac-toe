@@ -37,11 +37,7 @@ const Board = () => {
   };
 
   return (
-    <div
-      className={` ${
-        isTurn ? null : " cursor-not-allowed"
-      } w-full  h-full flex justify-center items-center py-20`}
-    >
+    <div className={` ${isTurn ? null: ' cursor-not-allowed'} w-full  h-full flex justify-center items-center py-20`}>
       <div className="px-2 sm:px-0 space-y-10 w-full 450px:w-[10cm]">
         <BoardHeader reset={reset} isXNext={isXNext} />
         <div className="grid grid-cols-3 gap-x-2 gap-y-4 content-around">

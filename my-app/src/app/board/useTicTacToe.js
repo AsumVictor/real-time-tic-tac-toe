@@ -13,7 +13,7 @@ function useTicTacToe() {
     const newSquares = squares.slice();
     newSquares[index] = isXNext ? "X" : "O";
     setSquares(newSquares);
-    setIsXNext(!isXNext);
+    setIsXNext(prev=>!prev);
 
     const winner = calculateWinner(newSquares);
     let status;
