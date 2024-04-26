@@ -1,40 +1,71 @@
 const { createServer } = require('http')
 const { parse } = require('url')
 const next = require('next')
- 
-const dev = process.env.NODE_ENV !== 'production'
-const hostname = 'localhost'
-const port = 3000
+const { Server } = require("socket.io");
+
+const dev = process.env.NODE_ENV !== "production";
+const hostname = "localhost";
+
+const port = 3000;
+const { v4 } = require("uuid");
+const turns = ["X", "O"];
+let onlineUser = [];
 // when using middleware `hostname` and `port` must be provided below
-const app = next({ dev, hostname, port })
-const handle = app.getRequestHandler()
- 
+const app = next({ dev, hostname, port });
+const handler = app.getRequestHandler();
+
 app.prepare().then(() => {
-  createServer(async (req, res) => {
-    try {
-      // Be sure to pass `true` as the second argument to `url.parse`.
-      // This tells it to parse the query portion of the URL.
-      const parsedUrl = parse(req.url, true)
-      const { pathname, query } = parsedUrl
- 
-      if (pathname === '/a') {
-        await app.render(req, res, '/a', query)
-      } else if (pathname === '/b') {
-        await app.render(req, res, '/b', query)
-      } else {
-        await handle(req, res, parsedUrl)
-      }
-    } catch (err) {
-      console.error('Error occurred handling', req.url, err)
-      res.statusCode = 500
-      res.end('internal server error')
-    }
-  })
-    .once('error', (err) => {
-      console.error(err)
-      process.exit(1)
+  const httpServer = createServer(handler);
+
+  const io = new Server(httpServer);
+
+  io.on("connection", (socket) => {
+    console.log(`${socket.id} connected to server`);
+
+    socket.on("register_user", (name) => {
+      onlineUser.push({
+        name: name,
+        socket_id: socket.id,
+      });
+      socket.broadcast.emit("new-online-user", {
+        name: name,
+        socket_id: socket.id,
+      });
+    });
+  
+    socket.on("new-user", (callback) => {
+      callback(onlineUser);
+    });
+  
+    socket.on("request-play", (data) => {
+      socket.to(data.reciever_id).emit("request-play", {
+        sender_id: socket.id,
+        sender_name: data.sender_name,
+      });
+    });
+  
+    socket.on("confirm-game", (id, callback) => {
+      let game_room = v4();
+      let player1_turn = turns[Math.round(Math.random() * turns.length)];
+      let player2_turn = player1_turn == "X" ? "O" : "X";
+      socket.to(id).emit("confirm-game", {game_room, turn: player2_turn});
+      socket.join(game_room)
+      callback({game_room, turn: player1_turn})
+    });
+  
+    socket.on('join-game', (game_room, callback) => {
+      socket.join(game_room)
+      callback()
+    })
+
+  });
+
+  httpServer
+    .once("error", (err) => {
+      console.error(err);
+      process.exit(1);
     })
     .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`)
-    })
-})
+      console.log(`> Ready on http://${hostname}:${port}`);
+    });
+});
