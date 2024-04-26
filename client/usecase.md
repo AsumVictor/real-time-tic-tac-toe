@@ -1,0 +1,4 @@
+- When game loads set player 1 and 2 random
+- Player 1 takes 'X' so isNext will always be true for player 1
+- player 2 takes 'O' so isNext will always be  false for player 2
+- 

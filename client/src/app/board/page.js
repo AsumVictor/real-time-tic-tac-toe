@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useTicTacToe from "./useTicTacToe";
 import BoardHeader from "@/components/BoardHeader";
@@ -7,11 +7,14 @@ import BoardTile from "@/components/BoardTile";
 import IconX from "@/utils/IconX";
 import IconO from "@/utils/IconO";
 import { QuitButton } from "@/utils/Buttons";
+import { io } from "socket.io-client";
+import { getSocket } from "@/lib/socket";
+
+const socket = io.connect('http://localhost:7000');
 
 const Board = () => {
   const { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile } =
     useTicTacToe();
-
   let [isOpen, setIsOpen] = useState(false);
   let [isTurn, setIsTurn] = useState(true);
 
@@ -36,8 +39,22 @@ const Board = () => {
     O: "text-[var(--primary-yellow)]",
   };
 
+  useEffect(() => {
+    const socket = getSocket();
+    socket.on('connect', () => {
+      console.log('Socket connected:', socket.id);
+    });
+
+    // Clean up the event listener when the component unmounts
+    return () => socket.off('connect');
+  }, []);
+
   return (
-    <div className={` ${isTurn ? null: ' cursor-not-allowed'} w-full  h-full flex justify-center items-center py-20`}>
+    <div
+      className={` ${
+        isTurn ? null : " cursor-not-allowed"
+      } w-full  h-full flex justify-center items-center py-20`}
+    >
       <div className="px-2 sm:px-0 space-y-10 w-full 450px:w-[10cm]">
         <BoardHeader reset={reset} isXNext={isXNext} />
         <div className="grid grid-cols-3 gap-x-2 gap-y-4 content-around">

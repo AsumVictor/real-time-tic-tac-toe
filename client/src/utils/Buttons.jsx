@@ -3,6 +3,7 @@ import IconRestart from "./IconRestart";
 
 const colorClasses = {
   btnGreen: "bg-[var(--primary-green)]",
+  btnRed: "bg-red-600",
   btnYellow: "bg-[var(--primary-yellow)]",
   btnRestart: "bg-[var(--menu-restart-color)]",
 };
@@ -32,13 +33,16 @@ export const PrimaryButton = ({
   return (
     <Link
       href={player === "X" ? "/board?player=x" : "/board?player=o"}
-      className={`relative ${buttonClass["primaryButton"]} block`}>
+      className={`relative ${buttonClass["primaryButton"]} block`}
+    >
       <button
-        className={`transition-all duration-300 ease-in  ${colorClasses[color]} ${hoverColorClasses[color]} ${buttonClass["primaryButton"]}`}>
+        className={`transition-all duration-300 ease-in  ${colorClasses[color]} ${hoverColorClasses[color]} ${buttonClass["primaryButton"]}`}
+      >
         <span className=" font-bold text-md sm:text-xl">{btnText}</span>
       </button>
       <div
-        className={`${buttonClass["shadowButton"]}  ${backgroundColorClasses[color]}`}></div>
+        className={`${buttonClass["shadowButton"]}  ${backgroundColorClasses[color]}`}
+      ></div>
     </Link>
   );
 };
@@ -50,7 +54,8 @@ export const RestartButton = ({ reset }) => {
         onClick={() => {
           reset();
         }}
-        className="z-10 bg-[var(--menu-restart-color)] h-10 w-10 flex items-center justify-center rounded-lg">
+        className="z-10 bg-[var(--menu-restart-color)] h-10 w-10 flex items-center justify-center rounded-lg"
+      >
         <IconRestart />
       </button>
       <div className="h-10 w-10 rounded-lg bg-[var(--menu-restart-bg-shadow-color)] absolute top-1 -z-10"></div>
@@ -69,11 +74,13 @@ export const QuitButton = ({
         onClick={() => {
           closeModal();
         }}
-        className={`z-10 ${colorClasses[color]} h-10 flex items-center justify-center rounded-lg px-2 font-bold`}>
+        className={`z-10 ${colorClasses[color]} h-10 flex items-center justify-center rounded-lg px-2 font-bold`}
+      >
         {text}
       </button>
       <div
-        className={`h-10 w-full rounded-lg ${backgroundColorClasses[color]} absolute top-1 -z-10`}></div>
+        className={`h-10 w-full rounded-lg ${backgroundColorClasses[color]} absolute top-1 -z-10`}
+      ></div>
     </div>
   );
 };
