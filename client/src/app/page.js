@@ -5,6 +5,7 @@ import { PrimaryButton, QuitButton } from "@/utils/Buttons";
 import IconO from "@/utils/IconO";
 import IconX from "@/utils/IconX";
 import { Dialog, Transition } from "@headlessui/react";
+import { useRouter } from 'next/navigation'
 import React, { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [name, setName] = useState("");
   const [askName, setAskName] = useState(true);
   const [onRequest, setOnRequest] = useState(false);
+  const router = useRouter()
   const [has_r_Request, setHas_r_Request] = useState({
     status: false,
     id: null,
@@ -24,6 +26,8 @@ export default function Home() {
   const handlerPlayerSelect = (player) => {
     setPlayer(player);
   };
+
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket connected:", socket.id);
@@ -47,7 +51,12 @@ export default function Home() {
       }
     });
 
-    
+    socket.on('confirm-game', ({ game_room, turn }) =>{
+       socket.emit("join-game", game_room,()=>{
+         router.push(`/board?r=${game_room}&t=${turn}`, { scroll: false })
+       })
+       console.log(game_room, turn)
+    })
 
     // Clean up the event listener when the component unmounts
     return () => socket.off("connect");
@@ -68,7 +77,13 @@ export default function Home() {
     setOnRequest(true);
   };
 
-const 
+  const confirm_game_play = () => {
+    socket.emit("confirm-game", has_r_Request.id, ({ game_room, turn }) => {
+      console.log(game_room, turn);
+      router.push(`/board?r=${game_room}&t=${turn}`, { scroll: false })
+    });
+    // Loading_game
+  };
 
   return (
     <div className="px-2 sm:px-0 min-w-[var(--mobile-width)]  sm:min-w-[var(--desktop-width)] space-y-10">
@@ -253,7 +268,7 @@ const
                         color="btnRed"
                       />
                       <QuitButton
-                        closeModal={() => null}
+                        closeModal={() => confirm_game_play()}
                         text="Accept"
                         color="btnYellow"
                       />
