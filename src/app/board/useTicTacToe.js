@@ -1,19 +1,28 @@
+import { getSocket } from "@/lib/socket";
 import { useState } from "react";
 
 function useTicTacToe() {
+  const socket = getSocket();
+
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
   const [winnerTile, setWinnerTile] = useState(null);
-  
+  const [gameRoom, setRoom] = useState(null);
+
+  const setGameRoom = (room_id) => {
+    setRoom(room_id);
+  };
+
   const handleClick = (index, isTurn) => {
-    if (!isTurn) return 
+    if (!isTurn) return;
     if (squares[index] || calculateWinner(squares)) {
       return;
     }
     const newSquares = squares.slice();
     newSquares[index] = isXNext ? "X" : "O";
     setSquares(newSquares);
-    setIsXNext(prev=>!prev);
+    setIsXNext((prev) => !prev);
+    socket.emit("update_board", newSquares, isXNext, gameRoom);
 
     const winner = calculateWinner(newSquares);
     let status;
@@ -54,7 +63,20 @@ function useTicTacToe() {
     return null;
   };
 
-  return { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile };
+  socket.on("update_board", (newSquares, isXNext) => {
+    setSquares(newSquares);
+    setIsXNext(!isXNext);
+  });
+  
+  return {
+    squares,
+    handleClick,
+    reset,
+    isXNext,
+    winnerTile,
+    setWinnerTile,
+    setGameRoom,
+  };
 }
 
 export default useTicTacToe;

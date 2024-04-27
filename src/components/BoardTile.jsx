@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconX, { IconXOutline } from "../utils/IconX";
 import IconO, { IconOOutline } from "../utils/IconO";
+import { getSocket } from "@/lib/socket";
 
-const BoardTile = ({ value, onTileClick, isXNext, isTurn }) => {
+
+const BoardTile = ({ value, onTileClick, isXNext, isTurn, number, game_room }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const socket = getSocket()
+  const tile_number = number
+  const g_room = game_room
 
   const handleMouseEnter = () => {
     if (!isTurn) return;
+    socket.emit('hover-true', g_room, number)
     setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
     if (!isTurn) return;
+    socket.emit('hover-false', g_room, number)
     setIsHovered(false);
   };
 
@@ -27,6 +34,25 @@ const BoardTile = ({ value, onTileClick, isXNext, isTurn }) => {
     ) : (
       <IconO fillColor="iconYellow" width="64" height="64" />
     );
+
+    useEffect(() => {
+      socket.on("connect", () => {
+        console.log("Socket connected:", socket.id);
+      });
+
+      socket.on("hover-true", (n) => {
+         if(n != tile_number) return
+         setIsHovered(true);
+      })
+
+      socket.on("hover-false", (n) => {
+        if(n != tile_number) return
+        setIsHovered(false);
+     })
+  
+      // Clean up the event listener when the component unmounts
+      return () => socket.off("connect");
+    }, []);
 
   return (
     <div className={`relative flex justify-center `}>

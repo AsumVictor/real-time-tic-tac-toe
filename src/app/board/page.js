@@ -9,14 +9,29 @@ import IconO from "@/utils/IconO";
 import { QuitButton } from "@/utils/Buttons";
 import { io } from "socket.io-client";
 import { getSocket } from "@/lib/socket";
+import { useSearchParams } from "next/navigation";
 
-const socket = io.connect('http://localhost:7000');
+const socket = io.connect("http://localhost:7000");
 
 const Board = () => {
-  const { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile } =
+  const searchParams = useSearchParams();
+  const turn = searchParams.get("t");
+  const game_room = searchParams.get("r");
+  const socket = getSocket();
+  const { squares, handleClick, reset, isXNext, winnerTile, setWinnerTile, setGameRoom } =
     useTicTacToe();
   let [isOpen, setIsOpen] = useState(false);
-  let [isTurn, setIsTurn] = useState(true);
+  let [isTurn, setIsTurn] = useState(turn === "X");
+
+  useEffect(() => {
+    if(isXNext) {
+      setIsTurn(turn === "X");
+    }else{
+      setIsTurn(turn !== "X");
+    }
+
+
+  }, [isXNext])
 
   function closeModal() {
     setIsOpen(false);
@@ -40,13 +55,13 @@ const Board = () => {
   };
 
   useEffect(() => {
-    const socket = getSocket();
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
+    setGameRoom(game_room);
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
     });
 
     // Clean up the event listener when the component unmounts
-    return () => socket.off('connect');
+    // return () => socket.off("connect");
   }, []);
 
   return (
@@ -63,54 +78,72 @@ const Board = () => {
             onTileClick={() => handleClick(0, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            number={0}
+            game_room={game_room}
           />
           <BoardTile
             value={squares[1]}
             onTileClick={() => handleClick(1, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={1}
           />
           <BoardTile
             value={squares[2]}
             onTileClick={() => handleClick(2, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={2}
           />
           <BoardTile
             value={squares[3]}
             onTileClick={() => handleClick(3, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={3}
           />
           <BoardTile
             value={squares[4]}
             onTileClick={() => handleClick(4, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={4}
           />
           <BoardTile
             value={squares[5]}
             onTileClick={() => handleClick(5, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={5}
           />
           <BoardTile
             value={squares[6]}
             onTileClick={() => handleClick(6, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={6}
           />
           <BoardTile
             value={squares[7]}
             onTileClick={() => handleClick(7, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={7}
           />
           <BoardTile
             value={squares[8]}
             onTileClick={() => handleClick(8, isTurn)}
             isXNext={isXNext}
             isTurn={isTurn}
+            game_room={game_room}
+            number={8}
           />
         </div>
         <div className="grid grid-cols-3 gap-x-2">
