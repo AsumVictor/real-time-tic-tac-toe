@@ -27,10 +27,10 @@ export default function Home() {
     setPlayer(player);
   };
 
-
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Socket connected:", socket.id);
+
       socket.emit("new-user", (data) => {
         setOnlinePlayers(data);
       });
@@ -59,7 +59,6 @@ export default function Home() {
     })
 
     // Clean up the event listener when the component unmounts
-    return () => socket.off("connect");
   }, []);
 
   const register_user = () => {

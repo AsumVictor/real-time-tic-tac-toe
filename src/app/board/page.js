@@ -1,17 +1,15 @@
 "use client";
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import useTicTacToe from "./useTicTacToe";
+import useTicTacToe from "../../components/useTicTacToe";
 import BoardHeader from "@/components/BoardHeader";
 import BoardTile from "@/components/BoardTile";
 import IconX from "@/utils/IconX";
 import IconO from "@/utils/IconO";
 import { QuitButton } from "@/utils/Buttons";
-import { io } from "socket.io-client";
 import { getSocket } from "@/lib/socket";
 import { useSearchParams } from "next/navigation";
 
-const socket = io.connect("http://localhost:7000");
 
 const Board = () => {
   const searchParams = useSearchParams();
@@ -35,7 +33,7 @@ const Board = () => {
 
   function closeModal() {
     setIsOpen(false);
-    setWinnerTile(null);
+    setWinnerTile(0);
     reset();
   }
 
@@ -65,9 +63,10 @@ const Board = () => {
   }, []);
 
   return (
+    <Suspense>
     <div
       className={` ${
-        isTurn ? null : " cursor-not-allowed"
+        isTurn ? '' : " cursor-not-allowed"
       } w-full  h-full flex justify-center items-center py-20`}
     >
       <div className="px-2 sm:px-0 space-y-10 w-full 450px:w-[10cm]">
@@ -222,6 +221,8 @@ const Board = () => {
         </Dialog>
       </Transition>
     </div>
+
+    </Suspense>
   );
 };
 
