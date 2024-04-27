@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 const { v4 } = require("uuid");
 const turns = ["X", "O"];
 let onlineUser = [];
-// when using middleware `hostname` and `port` must be provided below
+
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
@@ -69,8 +69,20 @@ app.prepare().then(() => {
     socket.on('update_board', (newSquares, isXNext, room)=>{
       socket.to(room).emit("update_board", newSquares, isXNext);
     })
+
+    socket.on("disconnect", ()=>{
+      users = onlineUser.filter(user=>{
+        return user.socket_id !== socket.id
+      })
+      onlineUser = users
+      socket.emit("new-user", onlineUser);
+    })
     
   });
+
+  io.on('disconnection',(socket)=>{
+    console.log(`user ${socket.id} disconnected`)
+  })
 
   httpServer
     .once("error", (err) => {
